@@ -28,11 +28,7 @@ const vw = new Viewer(document.getElementById("viewer"),{
 
 },function(ctx,width,height){
 	
-//	console.time("s");
-	
 	return mandelbrot(ctx,width,height);
-	
-//	console.timeEnd("s");
 	
 },function(str){
 	
