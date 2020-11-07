@@ -26,8 +26,6 @@ const Thread = function(skippable){
 
 		for(let j=jmin; j<jmax; j++){
 			for(let i=0; i<width; i++){
-				const index = (i + j * width) * 4;
-
 				I.push(i);
 				J.push(j);
 			}
@@ -74,12 +72,10 @@ module.exports = function(ctx,width,height){
 	
 	const dh = Math.floor(height / threads.length);
 	
-	const promises = [];
-	for(let i=0; i<threads.length-1; i++){
-		promises.push(threads[i].set(id,dh * i,dh * (i + 1),width,m));
-	}
-	promises.push(threads[threads.length-1].set(id,dh * (threads.length - 1),height,width,m));
-	
+	const promises = threads.map(function(t,i){
+		const jmax = i == threads.length-1 ? height : dh * (i + 1);
+		return t.set(id,dh * i,jmax,width,m);
+	});
 	
 	return Promise.all(promises).then(function(results){
 		
